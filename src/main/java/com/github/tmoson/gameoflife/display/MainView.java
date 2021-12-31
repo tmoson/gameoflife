@@ -8,6 +8,10 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
 
+
+/*
+ * @author Tyler Moson
+ */
 public class MainView extends VBox {
   private Button stepButton;
   private Canvas canvas;
@@ -21,33 +25,33 @@ public class MainView extends VBox {
       simulation.step();
       draw();
     });
-    canvas = new Canvas(400, 400);
+    canvas = new Canvas(850, 850);
     this.getChildren().addAll(stepButton, canvas);
     affine = new Affine();
-    affine.appendScale(400 / 10f, 400 / 10f);
-    simulation = new Simulation(10, 10);
+    affine.appendScale(850 / 200f, 850 / 200f);
+    simulation = new Simulation(200, 200);
+    initializeSimulation();
+  }
 
-    simulation.setAlive(2,2);
-    simulation.setAlive(3,2);
-    simulation.setAlive(4,2);
-
-    simulation.setAlive(4,5);
-
-    simulation.setAlive(5,5);
-    simulation.setAlive(5,6);
-    simulation.setAlive(6,5);
-    simulation.setAlive(6,6);
+  private void initializeSimulation(){
+    for (int x = 0; x < simulation.getWidth(); ++x) {
+      for (int y = 0; y < simulation.getLength(); y++) {
+        if((Math.random() * 100) > 68) {
+          simulation.setAlive(x,y);
+        }
+      }
+    }
   }
 
   public void draw() {
     GraphicsContext gc = canvas.getGraphicsContext2D();
     gc.setTransform(affine);
     gc.setFill(Color.LIGHTGRAY);
-    gc.fillRect(0, 0, 450, 450);
+    gc.fillRect(0, 0, 200, 200);
 
     gc.setFill(Color.LIGHTSTEELBLUE);
-    for (int y = 0; y < 10; ++y) {
-      for (int x = 0; x < 10; ++x) {
+    for (int y = 0; y < simulation.getLength(); ++y) {
+      for (int x = 0; x < simulation.getWidth(); ++x) {
         if (this.simulation.getState(x, y) == 1) {
           gc.fillRect(x, y, 1, 1);
         }
@@ -55,12 +59,12 @@ public class MainView extends VBox {
     }
 
     gc.setFill(Color.BLACK);
-    gc.setLineWidth(0.025);
-    for (int x = 0; x <= 10; ++x) {
-      gc.strokeLine(x, 0, x, 10);
+    gc.setLineWidth(0.05);
+    for (int x = 0; x <= simulation.getWidth(); ++x) {
+      gc.strokeLine(x, 0, x, simulation.getWidth());
     }
-    for (int y = 0; y <= 10; ++y) {
-      gc.strokeLine(0, y, 10, y);
+    for (int y = 0; y <= simulation.getLength(); ++y) {
+      gc.strokeLine(0, y, simulation.getLength(), y);
     }
   }
 }
