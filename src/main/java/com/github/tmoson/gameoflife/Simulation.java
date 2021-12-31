@@ -52,7 +52,7 @@ public class Simulation {
    * Run through a generation, marking cells as dead or alive,
    * as per the rules:
    *
-   *       3 neighbors, a cell survives/comes back to live
+   *       3 neighbors, a cell survives/comes back to life
    *       2 neighbors, an alive cell survives
    *       4 or more neighbors, a cell dies
    *       fewer than 2 neighbors, a cell dies.
@@ -80,21 +80,43 @@ public class Simulation {
   }
 
   /**
-   * Manually set a cell as alive - doesn't check that you're within the bounds of the simulation
+   * Manually set a cell as alive
    * @param x The row of the cell you want to set alive
    * @param y The column of the cell you want to set alive
    */
   public void setAlive(int x, int y) {
+    if(x < 0 || x >= width || y < 0 || y > length){
+      return;
+    }
     board[x][y] = 1;
   }
 
   /**
-   * Manually set a cell as dead - doesn't check that you're within the bounds of the simulation
+   * Manually set a cell as dead
    * @param x The row of the cell you want to set dead
    * @param y The column of the cell you want to set dead
    */
   public void setDead(int x, int y) {
+    if(x < 0 || x >= width || y < 0 || y > length){
+      return;
+    }
     board[x][y] = 0;
+  }
+
+  /**
+   * Either set a coordinate to be alive or dead, based on its current state
+   * @param x The row of the cell you want to toggle
+   * @param y The column of the cell you want to toggle
+   */
+  public void toggle(int x, int y){
+    if(x < 0 || x >= width || y < 0 || y > length){
+      return;
+    }
+    if(board[x][y] == 1){
+      board[x][y] = 0;
+    } else {
+      board[x][y] = 1;
+    }
   }
 
   /**

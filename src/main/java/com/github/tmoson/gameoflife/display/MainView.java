@@ -1,13 +1,15 @@
 package com.github.tmoson.gameoflife.display;
 
 import com.github.tmoson.gameoflife.Simulation;
+import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Affine;
-
+import javafx.scene.transform.NonInvertibleTransformException;
 
 /*
  * @author Tyler Moson
@@ -21,23 +23,41 @@ public class MainView extends VBox {
 
   public MainView() {
     stepButton = new Button("step");
-    stepButton.setOnAction(clickEvent -> {
-      simulation.step();
-      draw();
-    });
+    stepButton.setOnAction(
+        clickEvent -> {
+          simulation.step();
+          draw();
+        });
     canvas = new Canvas(850, 850);
+    this.canvas.setOnMousePressed(this::handleDraw);
+    this.canvas.setOnMouseDragged(this::handleDraw);
     this.getChildren().addAll(stepButton, canvas);
     affine = new Affine();
-    affine.appendScale(850 / 200f, 850 / 200f);
-    simulation = new Simulation(200, 200);
+    // really need to take an arg or something to set these sizes
+    // not sure I want to add spring in here, so I might go the arg route
+    affine.appendScale(850 / 100f, 850 / 100f);
+    simulation = new Simulation(100, 100);
     initializeSimulation();
   }
 
-  private void initializeSimulation(){
+  private void handleDraw(MouseEvent event) {
+    double mouseX = event.getX();
+    double mouseY = event.getY();
+    Point2D simCoord = null;
+    try {
+      simCoord = affine.inverseTransform(mouseX,mouseY);
+    } catch (NonInvertibleTransformException e) {
+      System.out.println("Could not invert transform, this shouldn't happen.");
+    }
+    simulation.toggle((int) simCoord.getX(), (int) simCoord.getY());
+    this.draw();
+  }
+
+  private void initializeSimulation() {
     for (int x = 0; x < simulation.getWidth(); ++x) {
       for (int y = 0; y < simulation.getLength(); y++) {
-        if((Math.random() * 100) > 68) {
-          simulation.setAlive(x,y);
+        if (Math.random() > .68) {
+          simulation.setAlive(x, y);
         }
       }
     }
@@ -46,9 +66,11 @@ public class MainView extends VBox {
   public void draw() {
     GraphicsContext gc = canvas.getGraphicsContext2D();
     gc.setTransform(affine);
+    //color background
     gc.setFill(Color.LIGHTGRAY);
-    gc.fillRect(0, 0, 200, 200);
+    gc.fillRect(0, 0, 850, 850);
 
+    // fill in live cells
     gc.setFill(Color.LIGHTSTEELBLUE);
     for (int y = 0; y < simulation.getLength(); ++y) {
       for (int x = 0; x < simulation.getWidth(); ++x) {
@@ -58,6 +80,7 @@ public class MainView extends VBox {
       }
     }
 
+    // draw grid lines
     gc.setFill(Color.BLACK);
     gc.setLineWidth(0.05);
     for (int x = 0; x <= simulation.getWidth(); ++x) {
