@@ -7,7 +7,7 @@ public class Simulation {
   protected int width, length;
   int[][] board;
 
-  /*
+  /**
    * Create a new empty (completely dead) simulation with the given length and width
    * @param width the number of rows the simulation is going to have
    * @param length the number of columns that will be present in each row
@@ -18,7 +18,7 @@ public class Simulation {
     this.board = new int[width][length];
   }
 
-  /*
+  /**
    * Count the number of neighbors for a cell, using the {@link #getState(int x, int y)} method
    * @param x The row number of the cell you want to count the neighbors of
    * @param y The column number of the cell you want to count the neighbors of
@@ -35,7 +35,7 @@ public class Simulation {
         + getState(x + 1, y + 1);
   }
 
-  /*
+  /**
    * Get the state of a cell in a way that properly prevents IndexOutOfBounds exceptions
    * @param x the row number of the cell that you want to check the state of
    * @param y the column number of the cell that you want to check the state of
@@ -48,7 +48,7 @@ public class Simulation {
     return board[x][y];
   }
 
-  /*
+  /**
    * Run through a generation, marking cells as dead or alive,
    * as per the rules:
    *
@@ -79,37 +79,35 @@ public class Simulation {
     board = newBoard;
   }
 
-  /*
-   * Manually set a cell as alive - doesn't check that you're within the bouds of the simulation
+  /**
+   * Manually set a cell as alive - doesn't check that you're within the bounds of the simulation
    * @param x The row of the cell you want to set alive
    * @param y The column of the cell you want to set alive
-   * @return Nothing, as this doesn't check for success, and will throw an exception if out of bounds
    */
   public void setAlive(int x, int y) {
     board[x][y] = 1;
   }
 
-  /*
-   * Manually set a cell as dead - doesn't check that you're within the bouds of the simulation
+  /**
+   * Manually set a cell as dead - doesn't check that you're within the bounds of the simulation
    * @param x The row of the cell you want to set dead
    * @param y The column of the cell you want to set dead
-   * @return Nothing, as this doesn't check for success, and will throw an exception if out of bounds
    */
   public void setDead(int x, int y) {
     board[x][y] = 0;
   }
 
-  /*
+  /**
    * Get the width of the board in the simulation, because you shouldn't need to have public access to the variable
-   * @return int containing the width of the simulation's board
+   * @return int The width of the simulation's board
    */
   public int getWidth() {
     return width;
   }
 
-  /*
+  /**
    * Get the length of the board in the simulation, because you shouldn't need to have public access to the variable
-   * @return int containing the width of the simulation's board
+   * @return int The length of the simulation's board
    */
   public int getLength() {
     return length;
