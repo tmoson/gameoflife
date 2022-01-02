@@ -4,6 +4,9 @@ package com.github.tmoson.gameoflife;
  * @author Tyler Moson
  */
 public class Simulation {
+  public static int DEAD = 0;
+  public static int ALIVE = 1;
+
   protected int width, length;
   int[][] board;
 
@@ -43,7 +46,7 @@ public class Simulation {
    */
   public int getState(int x, int y) {
     if (x < 0 || x >= width || y < 0 || y >= length) {
-      return 0;
+      return DEAD;
     }
     return board[x][y];
   }
@@ -68,11 +71,11 @@ public class Simulation {
       for (int x = 0; x < width; ++x) {
         int neighbors = countNeighbors(x, y);
         if (neighbors == 3) {
-          newBoard[x][y] = 1;
-        } else if (getState(x, y) == 1 && neighbors == 2) {
-          newBoard[x][y] = 1;
+          newBoard[x][y] = ALIVE;
+        } else if (getState(x, y) == ALIVE && neighbors == 2) {
+          newBoard[x][y] = ALIVE;
         } else {
-          newBoard[x][y] = 0;
+          newBoard[x][y] = DEAD;
         }
       }
     }
@@ -88,7 +91,7 @@ public class Simulation {
     if(x < 0 || x >= width || y < 0 || y > length){
       return;
     }
-    board[x][y] = 1;
+    board[x][y] = ALIVE;
   }
 
   /**
@@ -100,7 +103,7 @@ public class Simulation {
     if(x < 0 || x >= width || y < 0 || y > length){
       return;
     }
-    board[x][y] = 0;
+    board[x][y] = DEAD;
   }
 
   /**
@@ -112,10 +115,10 @@ public class Simulation {
     if(x < 0 || x >= width || y < 0 || y > length){
       return;
     }
-    if(board[x][y] == 1){
-      board[x][y] = 0;
+    if(board[x][y] == ALIVE){
+      board[x][y] = DEAD;
     } else {
-      board[x][y] = 1;
+      board[x][y] = ALIVE;
     }
   }
 
