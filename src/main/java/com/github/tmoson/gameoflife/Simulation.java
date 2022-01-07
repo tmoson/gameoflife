@@ -8,7 +8,7 @@ public class Simulation {
   public static int ALIVE = 1;
 
   protected int width, length;
-  int[][] board;
+  private int[][] board;
 
   /**
    * Create a new empty (completely dead) simulation with the given length and width
@@ -19,6 +19,16 @@ public class Simulation {
     this.width = width; // not really a fan of using the 'this' keyword, but trying it out
     this.length = length;
     this.board = new int[width][length];
+  }
+
+  public static Simulation copy(Simulation simulation){
+    Simulation copy = new Simulation(simulation.getWidth(), simulation.getLength());
+    for(int y = 0; y < simulation.getLength(); ++y){
+      for(int x = 0; x < simulation.getWidth(); ++x){
+        copy.setState(x, y, simulation.getState(x, y));
+      }
+    }
+    return copy;
   }
 
   /**
@@ -49,6 +59,10 @@ public class Simulation {
       return DEAD;
     }
     return board[x][y];
+  }
+
+  public void setState(int x, int y, int state){
+    board[x][y] = state;
   }
 
   /**
